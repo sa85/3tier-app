@@ -19,7 +19,7 @@ spec:
       volumes:
         - name: nginx-data
           hostPath:
-            path: /home/shoaib/php-container 
+            path: /home/$USER/php-container 
       containers:
       - name: nginx
         image: nginx:latest
@@ -28,3 +28,36 @@ spec:
         volumeMounts:
         - name: nginx-data
           mountPath: /var/www/html
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    tier: backend
+spec:
+  selector:
+    app: nginx
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    name: nginx
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      nodePort: 30080
+      name: http
+  selector:
+    name: nginx
