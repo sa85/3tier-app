@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-db
+spec:
+  selector:
+    matchLabels:
+      app: app-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app-db
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: app-db
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: ROOT_PASSWORD
+        ports:
+        - containerPort: 3306
+          name: app-db
+        volumeMounts:
+          - mountPath: /var/mysql
+            name: app-db-data
+      volumes:
+        - hostPath:
+            path: /home/shoaib/db-container
+          name: app-db-data
