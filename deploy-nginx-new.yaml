@@ -28,7 +28,6 @@ spec:
         volumeMounts:
         - name: nginx-data
           mountPath: /var/www/html
-          
 ---
 apiVersion: v1
 kind: Service
@@ -45,7 +44,6 @@ spec:
     port: 80
     targetPort: 80
   type: ClusterIP
-
 ---
 apiVersion: v1
 kind: Service
